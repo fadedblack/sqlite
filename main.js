@@ -3,9 +3,9 @@ import { repl, welcomeMsg } from "./src/lib.js";
 const main = () => {
   welcomeMsg();
 
-  while (true) {
+  while (repl()) {
     // change to a condition
-    console.log(repl());
+    console.log("Command Executed");
   }
 };
 
