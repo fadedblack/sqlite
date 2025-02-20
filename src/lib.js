@@ -5,45 +5,38 @@ Connected to a transient in-memory database.
 Use ".open FILENAME" to reopen on a persistent database.`);
 };
 
-const exitDeno = () => Deno.exit(0);
-
 const isValidCommand = ([command]) => {
-  const validCommands = ["create", "table", "column", "row"];
+  const commands = [
+    "create",
+    "table",
+    "column",
+    "select",
+    "insert",
+    "row",
+    ".exit",
+    ".help",
+  ];
 
-  if (!validCommands.includes(command)) {
+  if (!commands.includes(command)) {
     console.log("Invalid Command"); // don't print here
   }
 
-  return true; // shouldn't always return true
-};
-
-const isValidMetaCommand = ([command]) => {
-  const validMetaCommands = [".exit", ".help"];
-
-  if (!validMetaCommands.includes(command)) {
-    console.log("Invalid Command");
-  }
-
-  return true;
+  return true; // should always return true?
 };
 
 const executeCommand = (arg) => {
   if (arg.at(0) === ".exit") {
-    exitDeno();
+    Deno.exit(0);
   }
 
   return true;
 };
 
-const isMetaCommand = ([arg]) => arg.startsWith(".");
-
-const runningCondition = (arg) => {
-  // name change
-  const validity = isMetaCommand(arg)
-    ? isValidMetaCommand(arg)
-    : isValidCommand(arg);
-
+const executionStatus = (arg) => {
+  const validity = isValidCommand(arg);
   if (validity) {
+    console.log(`arg: ${arg}`);
+
     executeCommand(arg);
   }
 
@@ -51,8 +44,8 @@ const runningCondition = (arg) => {
 };
 
 export const repl = () => {
-  const args = prompt("sqlite>");
-  const argList = args.split(" "); //name change
+  const commands = prompt("sqlite>");
+  const args = commands.split(" ");
 
-  return runningCondition(argList);
+  return executionStatus(args);
 };
